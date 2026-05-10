@@ -85,14 +85,14 @@ export const StockSageChat: React.FC<StockSageChatProps> = ({ isBeginnerMode }) 
       )}
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col items-center justify-center relative p-6 overflow-hidden">
+      <div className="flex-1 flex flex-col items-center justify-center relative p-6 overflow-hidden bg-[radial-gradient(circle_at_50%_-20%,rgba(16,185,129,0.05),transparent)]">
         
         {/* Hero Section - Minimized */}
         <div className="text-center mb-8 relative pt-4">
-          <h1 className="text-4xl font-bold text-white tracking-tight mb-2">
+          <h1 className="text-4xl font-bold text-foreground tracking-tight mb-2">
             Good evening, <span className="italic text-emerald-accent">Rashmi Anand</span>
           </h1>
-          <p className="text-lg text-slate-400 font-medium">
+          <p className="text-lg text-muted font-medium">
             What are we <span className="italic text-emerald-accent">researching</span> today?
           </p>
         </div>
@@ -102,10 +102,10 @@ export const StockSageChat: React.FC<StockSageChatProps> = ({ isBeginnerMode }) 
           {MARKET_INDICES.map((index) => (
             <div 
               key={index.name} 
-              className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.06] transition-all cursor-pointer group"
+              className="p-4 rounded-2xl bg-foreground/[0.03] border border-border-primary hover:bg-foreground/[0.06] transition-all cursor-pointer group shadow-sm"
             >
-              <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1">{index.name}</p>
-              <h4 className="text-lg font-bold text-white">{index.price}</h4>
+              <p className="text-[9px] font-bold text-muted uppercase tracking-widest mb-1">{index.name}</p>
+              <h4 className="text-lg font-bold text-foreground">{index.price}</h4>
               <p className={cn(
                 "text-[10px] font-bold flex items-center gap-1",
                 index.up ? "text-emerald-500" : "text-red-500"
@@ -119,10 +119,10 @@ export const StockSageChat: React.FC<StockSageChatProps> = ({ isBeginnerMode }) 
 
         {/* Immersive Input Box - Minimized */}
         <div className="w-full max-w-3xl">
-          <div className="rounded-3xl bg-[#0A1122]/90 backdrop-blur-2xl border border-white/10 p-1 shadow-2xl focus-within:border-emerald-500/40 transition-all">
+          <div className="rounded-3xl bg-background border border-border-primary p-1 shadow-2xl focus-within:border-emerald-accent/40 transition-all">
             <div className="px-6 pt-4 pb-1 flex justify-between items-center">
-              <p className="text-xs text-slate-500 font-bold uppercase tracking-widest opacity-60">Ask StockSage anything...</p>
-              <div className="flex items-center gap-2 px-2 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[9px] font-bold">
+              <p className="text-xs text-muted font-bold uppercase tracking-widest opacity-60">Ask StockSage anything...</p>
+              <div className="flex items-center gap-2 px-2 py-1 rounded-full bg-emerald-accent/10 border border-emerald-accent/20 text-emerald-accent text-[9px] font-bold">
                 <Zap size={8} fill="currentColor" />
                 195
               </div>
@@ -131,33 +131,33 @@ export const StockSageChat: React.FC<StockSageChatProps> = ({ isBeginnerMode }) 
             <textarea 
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="w-full bg-transparent border-none focus:outline-none px-6 py-2 text-sm text-white placeholder:text-slate-700 resize-none h-20 font-medium"
+              className="w-full bg-transparent border-none focus:outline-none px-6 py-2 text-sm text-foreground placeholder:text-muted/30 resize-none h-20 font-medium"
               placeholder="Suggest some undervalued tech stocks..."
             />
 
             <div className="px-4 pb-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <button className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 transition-all">
+                <button className="p-2 rounded-xl bg-foreground/[0.03] hover:bg-foreground/[0.06] text-muted transition-all">
                   <Plus size={16} />
                 </button>
-                <div className="h-4 w-[1px] bg-white/10 mx-1" />
-                <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 text-slate-400 text-[10px] font-bold">
+                <div className="h-4 w-[1px] bg-border-primary mx-1" />
+                <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-foreground/[0.03] text-muted text-[10px] font-bold">
                   <AtSign size={12} />
                   mention
                 </button>
-                <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 text-slate-400 text-[10px] font-bold">
+                <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-foreground/[0.03] text-muted text-[10px] font-bold">
                   <Command size={12} />
                   command
                 </button>
               </div>
               <div className="flex items-center gap-2">
-                <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-[10px] font-bold">
-                  <div className="h-4 w-4 rounded-lg bg-indigo-500 flex items-center justify-center text-[8px] text-white font-bold">G</div>
+                <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-foreground/[0.03] border border-border-primary text-muted text-[10px] font-bold">
+                  <div className="h-4 w-4 rounded-lg bg-indigo-accent flex items-center justify-center text-[8px] text-white font-bold">G</div>
                   2.5 Pro
                 </button>
                 <button className={cn(
                   "h-10 w-10 rounded-xl flex items-center justify-center transition-all",
-                  input.trim() ? "bg-emerald-500 text-black shadow-lg shadow-emerald-500/20" : "bg-white/5 text-white/10 cursor-not-allowed"
+                  input.trim() ? "bg-emerald-accent text-white shadow-lg shadow-emerald-accent/20" : "bg-foreground/[0.03] text-muted/30 cursor-not-allowed"
                 )}>
                   <Send size={18} fill={input.trim() ? "currentColor" : "none"} />
                 </button>
@@ -165,7 +165,7 @@ export const StockSageChat: React.FC<StockSageChatProps> = ({ isBeginnerMode }) 
             </div>
           </div>
           
-          <div className="mt-4 flex flex-wrap justify-center gap-8 text-[9px] font-bold text-slate-600 uppercase tracking-widest">
+          <div className="mt-4 flex flex-wrap justify-center gap-8 text-[9px] font-bold text-muted uppercase tracking-widest">
             <span className="flex items-center gap-2">/ commands</span>
             <span className="flex items-center gap-2">@ stocks</span>
             <span className="flex items-center gap-2">⏎ send</span>
@@ -181,7 +181,7 @@ export const StockSageChat: React.FC<StockSageChatProps> = ({ isBeginnerMode }) 
             ].map((pill) => (
               <button 
                 key={pill.label}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/5 text-[10px] font-bold text-slate-400 hover:text-emerald-500 transition-all group"
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/[0.03] border border-border-primary text-[10px] font-bold text-muted hover:text-emerald-accent hover:border-emerald-accent/30 transition-all group"
               >
                 <pill.icon size={12} className="opacity-70 group-hover:opacity-100" />
                 {pill.label}

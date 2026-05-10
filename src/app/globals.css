@@ -19,11 +19,11 @@
   --background: #ffffff;
   --foreground: #020617;
   --card-bg: #f8fafc;
-  --card-border: #e2e8f0;
-  --text-muted: #64748b;
+  --card-border: #cbd5e1; /* Darker border for light theme */
+  --text-muted: #475569; /* Darker muted text for light theme */
   --accent-emerald: #059669;
   --accent-indigo: #4f46e5;
-  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg: rgba(255, 255, 255, 0.9);
 }
 
 .dark {

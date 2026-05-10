@@ -3,38 +3,49 @@
 import React from 'react';
 import { useTimeGreeting } from '@/hooks/useTimeGreeting';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
 
 export const GreetingHeader: React.FC = () => {
-  const { getGreetingMessage } = useTimeGreeting();
-  const { title, subtitle } = getGreetingMessage('Rashmi');
+  const { isNewUser } = useTimeGreeting();
+  
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    const isNew = isNewUser;
+    
+    // Mocked for now
+    const isLongGap = false; 
+
+    if (isNew) return "Welcome to UseMoney, Rashmi 👋";
+    if (isLongGap) return "Welcome back, Rashmi — it’s been a while 👋";
+    
+    if (hour < 12) return "Good Morning, Rashmi 👋";
+    if (hour < 17) return "Good Afternoon, Rashmi 👋";
+    if (hour < 21) return "Good Evening, Rashmi 🌙";
+    return "Burning the midnight oil, Rashmi? 🌙";
+  };
+
+  const greeting = getGreeting();
+  const subtitle = isNewUser 
+    ? "Your AI-powered investing OS is ready. Let's build your wealth."
+    : "Your portfolio moved +2.1% today. AI has found 3 new opportunities.";
 
   return (
-    <div className="mb-10 pt-8">
-      <motion.div
+    <div className="mb-10">
+      <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="flex flex-col gap-2"
       >
-        <div className="flex items-center gap-2 mb-2">
-          <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-xs font-medium text-emerald-500/80 uppercase tracking-widest">
-            AI Portfolio Analysis Live
-          </span>
-        </div>
-        
-        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-3 tracking-tight">
-          {title}
-        </h1>
-        
-        <div className="flex items-center gap-3">
-          <p className="text-lg text-muted">
-            {subtitle}
-          </p>
-          <div className="flex items-center gap-1.5 rounded-full bg-indigo-accent/10 px-3 py-1 text-xs font-medium text-indigo-accent border border-indigo-accent/20">
+        <div className="flex items-center gap-4">
+          <h1 className="text-4xl font-bold text-foreground tracking-tight">
+            {greeting}
+          </h1>
+          <div className="flex items-center gap-1.5 rounded-full bg-indigo-accent/10 px-3 py-1 text-xs font-bold text-indigo-accent border border-indigo-accent/20">
             AI Optimized
           </div>
         </div>
+        <p className="text-lg text-muted font-medium">
+          {subtitle}
+        </p>
       </motion.div>
     </div>
   );

@@ -6,9 +6,9 @@ import { Search, Plus, TrendingUp, Sparkles, Star } from 'lucide-react';
 
 const SUGGESTIONS = [
   { symbol: "TCS", name: "Tata Consultancy", sector: "IT", change: "+1.2%" },
-  { symbol: "NIFTY", name: "Nifty 50 Index", sector: "Index", change: "+0.8%" },
+  { symbol: "NIFTY 50", name: "Nifty 50 Index", sector: "Index", change: "+0.8%" },
   { symbol: "GOLD", name: "Gold Commodities", sector: "Commodity", change: "-0.2%" },
-  { symbol: "HDFCBANK", name: "HDFC Bank", sector: "Banking", change: "+2.1%" },
+  { symbol: "RELIANCE", name: "Reliance Industries", sector: "Energy", change: "+2.1%" },
 ];
 
 export const WatchlistEmpty: React.FC = () => {
@@ -38,9 +38,9 @@ export const WatchlistEmpty: React.FC = () => {
         </div>
 
         <div className="text-left">
-          <h4 className="text-xs font-bold text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
+          <h4 className="text-xs font-bold text-muted uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
             <Sparkles size={14} className="text-emerald-accent" />
-            AI Suggested for you
+            People like you are tracking
           </h4>
           
           <div className="grid grid-cols-1 gap-3">

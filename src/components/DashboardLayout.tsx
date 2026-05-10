@@ -10,12 +10,16 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+import { ActionSheet } from './ActionSheet';
+
 interface DashboardLayoutProps {
   isBeginnerMode: boolean;
   children?: React.ReactNode;
 }
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ isBeginnerMode, children }) => {
+  const [selectedStock, setSelectedStock] = React.useState<any>(null);
+  
   const stats = [
     { label: 'Invested', value: '$84,200', icon: BarChart3, color: 'text-indigo-accent' },
     { label: 'Returns', value: '+$40,392', icon: Zap, color: 'text-emerald-accent' },
@@ -90,6 +94,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ isBeginnerMode
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1 }}
+                onClick={() => setSelectedStock(stock)}
                 className="flex items-center justify-between p-6 rounded-3xl bg-foreground/[0.02] border border-border-primary hover:bg-foreground/[0.04] transition-all cursor-pointer group"
               >
                 <div className="flex items-center gap-4">
@@ -110,6 +115,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ isBeginnerMode
           </div>
         </div>
       </div>
+
+      <ActionSheet 
+        isOpen={!!selectedStock} 
+        onClose={() => setSelectedStock(null)} 
+        data={selectedStock} 
+      />
 
       {/* Sidebar Area */}
       <div className="space-y-8">

@@ -2,21 +2,32 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, TrendingUp, Info, Zap, Target, Share2, BarChart3 } from 'lucide-react';
+import { X, TrendingUp, TrendingDown, Star, Plus, Share2, BarChart2 } from 'lucide-react';
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 interface ActionSheetProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
-  children: React.ReactNode;
+  data: {
+    name: string;
+    price: string;
+    change: string;
+    up: boolean;
+  } | null;
 }
 
-export const ActionSheet: React.FC<ActionSheetProps> = ({ isOpen, onClose, title, children }) => {
+export const ActionSheet: React.FC<ActionSheetProps> = ({ isOpen, onClose, data }) => {
+  if (!data) return null;
+
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -24,63 +35,81 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({ isOpen, onClose, title
             onClick={onClose}
             className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm"
           />
-          
-          {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed inset-x-4 top-[10%] bottom-[10%] md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-3xl z-[70] overflow-hidden rounded-[2.5rem] glass-darker border border-border-primary shadow-2xl flex flex-col"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed bottom-0 left-0 right-0 z-[70] bg-background border-t border-border-primary rounded-t-[2.5rem] p-8 pb-12 shadow-2xl xl:max-w-4xl xl:mx-auto"
           >
-            {/* Header */}
-            <div className="p-8 border-b border-border-primary flex items-center justify-between bg-foreground/[0.02]">
+            <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-2xl bg-emerald-accent/10 text-emerald-accent flex items-center justify-center">
-                  <BarChart3 size={24} />
+                <div className="h-14 w-14 rounded-2xl bg-foreground/5 flex items-center justify-center font-bold text-2xl border border-border-primary">
+                  {data.name[0]}
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground">{title}</h2>
-                  <p className="text-sm text-muted">Live Insights & Analysis</p>
+                  <h3 className="text-2xl font-bold text-foreground">{data.name}</h3>
+                  <p className="text-sm font-bold text-muted uppercase tracking-widest">Global Market Asset</p>
                 </div>
               </div>
-              <button
+              <button 
                 onClick={onClose}
-                className="p-2 rounded-xl bg-foreground/5 text-muted hover:text-foreground transition-colors"
+                className="p-2 rounded-full bg-foreground/5 text-muted hover:text-foreground transition-all"
               >
                 <X size={24} />
               </button>
             </div>
 
-            {/* Content Area */}
-            <div className="flex-1 overflow-y-auto p-8">
-              {children}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+              <div className="p-6 rounded-3xl bg-foreground/[0.03] border border-border-primary">
+                <p className="text-xs font-bold text-muted uppercase tracking-widest mb-2">Live Price</p>
+                <div className="flex items-baseline gap-3">
+                  <span className="text-4xl font-bold text-foreground">{data.price}</span>
+                  <span className={cn(
+                    "text-lg font-bold flex items-center gap-1",
+                    data.up ? "text-emerald-accent" : "text-red-500"
+                  )}>
+                    {data.up ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
+                    {data.change}
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-6 rounded-3xl bg-indigo-accent/5 border border-indigo-accent/20">
+                <p className="text-xs font-bold text-indigo-accent uppercase tracking-widest mb-2">AI Insight</p>
+                <p className="text-sm font-medium text-foreground leading-relaxed">
+                  Strong momentum detected. Relative strength index (RSI) is at 62, suggesting continued upward trend. AI recommends <span className="text-indigo-accent font-bold underline">Holding</span>.
+                </p>
+              </div>
             </div>
 
-            {/* Footer Actions */}
-            <div className="p-6 border-t border-border-primary bg-foreground/[0.02] flex items-center justify-between gap-4">
-               <div className="flex items-center gap-2">
-                 <button className="p-3 rounded-xl bg-foreground/5 text-muted hover:text-foreground transition-all">
-                   <Share2 size={20} />
-                 </button>
-                 <button className="p-3 rounded-xl bg-foreground/5 text-muted hover:text-foreground transition-all">
-                   <Target size={20} />
-                 </button>
-               </div>
-               
-               <div className="flex items-center gap-3">
-                 <button 
-                  onClick={onClose}
-                  className="px-6 py-3 rounded-xl text-sm font-bold text-muted hover:text-foreground transition-all"
-                 >
-                   Dismiss
-                 </button>
-                 <button className="px-8 py-3 rounded-xl bg-emerald-accent text-sm font-bold text-white hover:bg-emerald-accent/80 transition-all shadow-lg shadow-emerald-accent/10">
-                   Add to Watchlist
-                 </button>
-               </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <button className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-foreground/[0.03] hover:bg-foreground/[0.05] transition-all group">
+                <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                   <Star size={20} className="text-amber-500" />
+                </div>
+                <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Watchlist</span>
+              </button>
+              <button className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-foreground/[0.03] hover:bg-foreground/[0.05] transition-all group">
+                <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                   <BarChart2 size={20} className="text-indigo-accent" />
+                </div>
+                <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Analyse</span>
+              </button>
+              <button className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-foreground/[0.03] hover:bg-foreground/[0.05] transition-all group">
+                <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                   <Plus size={20} className="text-emerald-accent" />
+                </div>
+                <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Buy</span>
+              </button>
+              <button className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-foreground/[0.03] hover:bg-foreground/[0.05] transition-all group">
+                <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                   <Share2 size={20} className="text-slate-400" />
+                </div>
+                <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Share</span>
+              </button>
             </div>
           </motion.div>
-
         </>
       )}
     </AnimatePresence>

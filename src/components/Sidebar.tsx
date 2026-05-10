@@ -100,22 +100,22 @@ export const Sidebar: React.FC<{ activeId: string; onSelect: (id: string) => voi
         <div className="px-4 mt-8 mb-2 text-[10px] font-bold text-muted uppercase tracking-[0.2em]">Settings</div>
         <button className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-muted hover:text-foreground hover:bg-foreground/5 transition-all">
           <Settings size={20} />
-          <span className="font-bold text-sm">Preferences</span>
+          <span className="font-bold text-sm tracking-tight">Preferences</span>
         </button>
         <button className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-red-500 hover:bg-red-500/10 transition-all">
           <LogOut size={20} />
-          <span className="font-bold text-sm">Sign Out</span>
+          <span className="font-bold text-sm tracking-tight">Sign Out</span>
         </button>
       </div>
 
       <div className="p-6">
         <div className="p-4 rounded-2xl bg-indigo-accent/10 border border-indigo-accent/20">
           <div className="flex items-center gap-2 mb-2">
-            <Brain size={16} className="text-indigo-accent" />
+            <Sparkles size={16} className="text-indigo-accent" />
             <span className="text-[10px] font-bold text-foreground uppercase tracking-wider">Pro Intelligence</span>
           </div>
           <p className="text-[10px] text-muted font-medium mb-3">Upgrade to unlock Portfolio Roast and Factor Analysis.</p>
-          <button className="w-full py-2 bg-indigo-accent hover:bg-indigo-accent/80 text-white rounded-lg text-[10px] font-bold transition-all">
+          <button className="w-full py-2 bg-indigo-accent hover:bg-indigo-accent/80 text-white rounded-lg text-[10px] font-bold transition-all shadow-lg shadow-indigo-accent/20">
             Upgrade Now
           </button>
         </div>

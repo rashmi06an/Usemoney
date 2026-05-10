@@ -6,7 +6,6 @@ import { Sidebar } from '@/components/Sidebar';
 import { GreetingHeader } from '@/components/GreetingHeader';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { AIAssistantCard } from '@/components/AIAssistantCard';
-import { OnboardingModal } from '@/components/OnboardingModal';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import { useToast } from '@/components/Toast';
 import { DashboardSkeleton } from '@/components/Skeleton';
@@ -32,20 +31,63 @@ export default function Home() {
   const { 
     isOpen: isOnboardingOpen, 
     isBeginnerMode,
-    dismissedIntros,
     completeOnboarding, 
-    dismissIntro,
     toggleMode
   } = useOnboarding();
   
   const { showToast } = useToast();
   const [isLoading, setIsLoading] = React.useState(true);
+  const [dismissedIntros, setDismissedIntros] = useState<Record<string, boolean>>({});
+
+  const PAGE_INTROS: Record<string, { title: string; description: string; name: string }> = {
+    dashboard: {
+      name: 'Dashboard',
+      title: 'Welcome to your Investing OS',
+      description: 'The Action Hub is where you track your total wealth, see top movers, and get AI insights in real-time.'
+    },
+    portfolio: {
+      name: 'Portfolio',
+      title: 'Track Your Performance',
+      description: 'Monitor your holdings, see profit/loss, and get AI suggestions to rebalance your portfolio for better returns.'
+    },
+    'ai-research': {
+      name: 'AI Research',
+      title: 'Deep-Dive with StockSage',
+      description: 'Enter any stock symbol to get a complete 360° AI analysis, risk reports, and future outlook.'
+    },
+    markets: {
+      name: 'Markets',
+      title: 'Market Pulse',
+      description: 'Pulse of the global economy. Beginner mode simplifies complex heatmaps into easy-to-read summary cards.'
+    },
+    watchlist: {
+      name: 'Watchlist',
+      title: 'Track Before You Buy',
+      description: 'Save stocks here to let AI monitor them. You will get alerts when it is the best time to enter or exit.'
+    },
+    'fire-goals': {
+      name: 'FIRE Goals',
+      title: 'Plan Your Freedom',
+      description: 'Set your retirement targets and track your progress towards Financial Independence and Retiring Early.'
+    }
+  };
 
   React.useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, [activeTab]);
+
+  React.useEffect(() => {
+    const saved = localStorage.getItem('dismissed_intros');
+    if (saved) setDismissedIntros(JSON.parse(saved));
+  }, []);
+
+  const dismissIntro = (pageId: string) => {
+    const updated = { ...dismissedIntros, [pageId]: true };
+    setDismissedIntros(updated);
+    localStorage.setItem('dismissed_intros', JSON.stringify(updated));
+  };
 
   const handleComplete = () => {
     completeOnboarding();
@@ -60,90 +102,32 @@ export default function Home() {
         return <StockSageChat isBeginnerMode={isBeginnerMode} />;
       case 'dashboard':
         return (
-          <>
-            {isBeginnerMode && (
-              <ContextualIntro
-                pageName="Dashboard"
-                title="Your Financial Command Center"
-                description="This dashboard gives you a high-level view of your net worth, portfolio performance, and AI-driven insights. It's designed to help you spot opportunities at a glance."
-                isDismissed={dismissedIntros.includes('Dashboard')}
-                onDismiss={() => dismissIntro('Dashboard')}
-                onExplainMore={() => showToast("StockSage is preparing a detailed breakdown...", "info")}
-              />
-            )}
-            <DashboardLayout isBeginnerMode={isBeginnerMode}>
-              <AIAssistantCard />
-            </DashboardLayout>
-          </>
+          <DashboardLayout isBeginnerMode={isBeginnerMode}>
+            <AIAssistantCard />
+          </DashboardLayout>
         );
       case 'watchlist':
-        return (
-          <>
-            {isBeginnerMode && (
-              <ContextualIntro
-                pageName="Watchlist"
-                title="Track your interests"
-                description="Your watchlist is where you keep an eye on stocks you're interested in. AI will analyze them and alert you for buy/sell opportunities."
-                isDismissed={dismissedIntros.includes('Watchlist')}
-                onDismiss={() => dismissIntro('Watchlist')}
-              />
-            )}
-            <WatchlistEmpty />
-          </>
-        );
+        return <WatchlistEmpty />;
       case 'markets':
         return (
-          <>
-            {isBeginnerMode && (
-              <ContextualIntro
-                pageName="Markets"
-                title="Global Market Pulse"
-                description="A simplified view of market indices, top gainers, and AI summaries of global trends."
-                isDismissed={dismissedIntros.includes('Markets')}
-                onDismiss={() => dismissIntro('Markets')}
-              />
-            )}
-            <div className="rounded-3xl glass-darker p-20 text-center border border-border-primary">
-               <h3 className="text-2xl font-bold text-foreground mb-2">Market View</h3>
-               <p className="text-muted">Rendering {isBeginnerMode ? 'Beginner' : 'Advanced'} analytics...</p>
-            </div>
-          </>
+          <div className="rounded-3xl glass-darker p-20 text-center border border-border-primary">
+             <h3 className="text-2xl font-bold text-foreground mb-2">Market View</h3>
+             <p className="text-muted">Rendering {isBeginnerMode ? 'Beginner' : 'Advanced'} analytics...</p>
+          </div>
         );
       case 'portfolio':
         return (
-          <>
-            {isBeginnerMode && (
-              <ContextualIntro
-                pageName="Portfolio"
-                title="Asset Breakdown"
-                description="See exactly where your money is. We categorize your holdings by sector, risk, and asset class."
-                isDismissed={dismissedIntros.includes('Portfolio')}
-                onDismiss={() => dismissIntro('Portfolio')}
-              />
-            )}
-            <div className="rounded-3xl glass-darker p-20 text-center border border-border-primary">
-              <h3 className="text-2xl font-bold text-foreground mb-2">Portfolio Analytics</h3>
-              <p className="text-muted">Coming soon...</p>
-            </div>
-          </>
+          <div className="rounded-3xl glass-darker p-20 text-center border border-border-primary">
+            <h3 className="text-2xl font-bold text-foreground mb-2">Portfolio Analytics</h3>
+            <p className="text-muted">Coming soon...</p>
+          </div>
         );
-      case 'research':
+      case 'ai-research':
         return (
-          <>
-            {isBeginnerMode && (
-              <ContextualIntro
-                pageName="Research"
-                title="AI Stock Research"
-                description="Deep dive into any stock. AI roasts company financials and finds hidden risks."
-                isDismissed={dismissedIntros.includes('Research')}
-                onDismiss={() => dismissIntro('Research')}
-              />
-            )}
-            <div className="rounded-3xl glass-darker p-20 text-center border border-border-primary">
-              <h3 className="text-2xl font-bold text-foreground mb-2">AI Research Lab</h3>
-              <p className="text-muted">Analyzing 5000+ stocks...</p>
-            </div>
-          </>
+          <div className="rounded-3xl glass-darker p-20 text-center border border-border-primary">
+            <h3 className="text-2xl font-bold text-foreground mb-2">AI Research Lab</h3>
+            <p className="text-muted">Analyzing 5000+ stocks...</p>
+          </div>
         );
       default:
         return (
@@ -157,6 +141,20 @@ export default function Home() {
 
   return (
     <main className="min-h-screen glow-bg">
+      {isBeginnerMode && activeTab !== 'chat' && PAGE_INTROS[activeTab] && !dismissedIntros[activeTab] && (
+        <ContextualIntro 
+          pageName={PAGE_INTROS[activeTab].name}
+          title={PAGE_INTROS[activeTab].title}
+          description={PAGE_INTROS[activeTab].description}
+          isDismissed={false}
+          onDismiss={() => dismissIntro(activeTab)}
+          onExplainMore={() => {
+            dismissIntro(activeTab);
+            setActiveTab('chat');
+          }}
+        />
+      )}
+
       <Sidebar activeId={activeTab} onSelect={setActiveTab} />
       
       <div className="xl:pl-64 transition-all">
@@ -168,10 +166,9 @@ export default function Home() {
         />
         
         <div className={cn(
-          "mx-auto pt-20", // Push down for Navbar
+          "mx-auto pt-20", 
           activeTab === 'chat' ? "max-w-none h-[calc(100vh-64px)] overflow-hidden" : "max-w-7xl px-6 pb-20"
         )}>
-          {/* Ticker now lives inside the content container to avoid floating issues */}
           {!isNewUser && !isBeginnerMode && activeTab === 'dashboard' && (
             <div className="mb-8">
               <MarketTicker />
@@ -189,10 +186,9 @@ export default function Home() {
         isOpen={isOnboardingOpen}
         onClose={handleComplete}
         onSelectLevel={(isBeginner) => {
-          // Explicitly set level from onboarding
           const mode = isBeginner ? 'beginner' : 'advanced';
           localStorage.setItem('usemoney_mode', mode);
-          window.location.reload(); // Reload to apply mode globally
+          window.location.reload();
         }}
       />
 
