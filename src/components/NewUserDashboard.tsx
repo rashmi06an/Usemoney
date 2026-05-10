@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { UserPlus, Shield, Target, Rocket, ChevronRight, CheckCircle2, Circle, ArrowRight } from 'lucide-react';
+import { UserPlus, Shield, Target, Rocket, ChevronRight, CheckCircle2, Circle, ArrowRight, HelpCircle } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -109,10 +109,16 @@ export const NewUserDashboard: React.FC = () => {
           </div>
 
           <div className="p-8 rounded-[2.5rem] bg-foreground/[0.03] border border-dashed border-border-primary text-center">
+            <HelpCircle size={32} className="mx-auto mb-4 text-muted opacity-20" />
             <p className="text-sm text-muted font-medium mb-4">Need help setting up?</p>
-            <button className="text-xs font-bold text-emerald-accent hover:underline">
-              Talk to StockSage AI Helper
-            </button>
+            <div className="flex flex-col gap-2">
+              <button className="py-3 rounded-xl bg-foreground/5 text-xs font-bold text-foreground hover:bg-foreground/10 transition-all">
+                View Setup Guides
+              </button>
+              <button className="text-[10px] font-bold text-emerald-accent hover:underline">
+                Talk to StockSage AI Helper
+              </button>
+            </div>
           </div>
         </div>
       </div>

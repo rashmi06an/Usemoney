@@ -98,7 +98,7 @@ export const StockSageChat: React.FC<StockSageChatProps> = ({ isBeginnerMode }) 
         {/* Hero Section - Minimized */}
         <div className="text-center mb-8 relative pt-4">
           <h1 className="text-4xl font-bold text-foreground tracking-tight mb-2">
-            Good evening, <span className="italic text-emerald-accent">Rashmi Anand</span>
+            Good evening, <span className="italic text-emerald-accent">Rashmi</span>
           </h1>
           <p className="text-lg text-muted font-medium">
             What are we <span className="italic text-emerald-accent">researching</span> today?
