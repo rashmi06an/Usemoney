@@ -12,7 +12,6 @@ import { DashboardSkeleton } from '@/components/Skeleton';
 import { StoryOnboarding } from '@/components/StoryOnboarding';
 import { ContextualIntro } from '@/components/ContextualIntro';
 import { StockSageChat } from '@/components/StockSageChat';
-import { NewUserDashboard } from '@/components/NewUserDashboard';
 import { MarketView } from '@/components/MarketView';
 import { HelpCenter } from '@/components/HelpCenter';
 import { FloatingAI } from '@/components/FloatingAI';
@@ -29,7 +28,7 @@ function cn(...inputs: ClassValue[]) {
 
 export default function Home() {
   const { isNewUser } = useTimeGreeting();
-  const [activeTab, setActiveTab] = useState(isNewUser ? 'new-user' : 'dashboard');
+  const [activeTab, setActiveTab] = useState('dashboard');
   const { theme, toggleTheme } = useTheme();
   const { 
     isOpen: isOnboardingOpen, 
@@ -72,11 +71,6 @@ export default function Home() {
       name: 'FIRE Goals',
       title: 'Plan Your Freedom',
       description: 'Set your retirement targets and track your progress towards Financial Independence and Retiring Early.'
-    },
-    'new-user': {
-      name: 'New User',
-      title: 'Setup Your Workspace',
-      description: 'Personalize your profile and goals to get the most out of UseMoney AI.'
     }
   };
 
@@ -106,8 +100,6 @@ export default function Home() {
     if (isLoading) return <DashboardSkeleton />;
 
     switch (activeTab) {
-      case 'new-user':
-        return <NewUserDashboard />;
       case 'chat':
         return <StockSageChat isBeginnerMode={isBeginnerMode} />;
       case 'dashboard':
@@ -164,8 +156,7 @@ export default function Home() {
 
       <Sidebar 
         activeId={activeTab} 
-        onSelect={setActiveTab} 
-        isBeginnerMode={isBeginnerMode}
+        onSelect={setActiveTab}
       />
       
       <div className="xl:pl-64 transition-all">
@@ -197,18 +188,14 @@ export default function Home() {
         isOpen={isOnboardingOpen}
         onClose={handleComplete}
         onSelectLevel={(isFirstTime) => {
+          setActiveTab('dashboard');
           if (isFirstTime) {
-            setActiveTab('new-user');
-            // Ensure beginner mode is ON for new users
             if (!isBeginnerMode) toggleMode(); 
             localStorage.setItem('usemoney_mode', 'beginner');
           } else {
-            setActiveTab('dashboard');
-            // Ensure advanced mode is ON for existing users
             if (isBeginnerMode) toggleMode();
             localStorage.setItem('usemoney_mode', 'advanced');
           }
-          // Mark as onboarded and close
           localStorage.setItem('usemoney_onboarded', 'true');
         }}
       />

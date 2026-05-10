@@ -1,12 +1,11 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, 
   Wallet, 
   TrendingUp, 
-  Search, 
   Star, 
   Settings, 
   LogOut,
@@ -14,7 +13,6 @@ import {
   Brain,
   Sparkles,
   Plus,
-  UserPlus,
   HelpCircle
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
@@ -33,33 +31,12 @@ const MENU_ITEMS = [
   { id: 'watchlist', label: 'Watchlist', icon: Star },
   { id: 'goals', label: 'FIRE Goals', icon: Target },
   { id: 'help', label: 'Guides', icon: HelpCircle },
-  { id: 'new-user', label: 'New User', icon: UserPlus },
 ];
 
 export const Sidebar: React.FC<{ 
   activeId: string; 
   onSelect: (id: string) => void;
-  isBeginnerMode: boolean;
-}> = ({ activeId, onSelect, isBeginnerMode }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const filteredMenuItems = MENU_ITEMS.filter(item => {
-    if (item.id === 'new-user' && !isBeginnerMode) return false;
-    return true;
-  });
-
-  // Restore scroll position
-  useEffect(() => {
-    const savedScroll = sessionStorage.getItem('sidebar-scroll');
-    if (savedScroll && scrollRef.current) {
-      scrollRef.current.scrollTop = parseInt(savedScroll);
-    }
-  }, []);
-
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    sessionStorage.setItem('sidebar-scroll', e.currentTarget.scrollTop.toString());
-  };
-
+}> = ({ activeId, onSelect }) => {
   return (
     <aside className="fixed left-0 top-0 bottom-0 w-64 glass border-r border-white/5 z-40 hidden xl:flex flex-col">
       <div className="p-8 pb-4">
@@ -80,12 +57,10 @@ export const Sidebar: React.FC<{
       </div>
 
       <div 
-        ref={scrollRef}
-        onScroll={handleScroll}
         className="flex-1 overflow-y-auto px-4 space-y-2 no-scrollbar pb-10"
       >
         <div className="px-4 mb-2 text-[10px] font-bold text-muted uppercase tracking-[0.2em]">Menu</div>
-        {filteredMenuItems.map((item) => (
+        {MENU_ITEMS.map((item) => (
           <button
             key={item.id}
             onClick={() => onSelect(item.id)}

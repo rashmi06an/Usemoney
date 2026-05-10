@@ -1,12 +1,9 @@
 'use client';
 
 import React from 'react';
-import { useTimeGreeting } from '@/hooks/useTimeGreeting';
 import { motion } from 'framer-motion';
 
 export const GreetingHeader: React.FC<{ isBeginnerMode: boolean }> = ({ isBeginnerMode }) => {
-  const { isNewUser } = useTimeGreeting();
-  
   const getGreeting = () => {
     const hour = new Date().getHours();
     
