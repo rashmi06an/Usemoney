@@ -162,7 +162,11 @@ export default function Home() {
         />
       )}
 
-      <Sidebar activeId={activeTab} onSelect={setActiveTab} />
+      <Sidebar 
+        activeId={activeTab} 
+        onSelect={setActiveTab} 
+        isBeginnerMode={isBeginnerMode}
+      />
       
       <div className="xl:pl-64 transition-all">
         <Navbar 
@@ -182,7 +186,7 @@ export default function Home() {
             </div>
           )}
 
-          {activeTab === 'dashboard' && <GreetingHeader />}
+          {activeTab === 'dashboard' && <GreetingHeader isBeginnerMode={isBeginnerMode} />}
           <div className={cn(activeTab === 'chat' ? "h-full" : "mt-6")}>
             {renderContent()}
           </div>
@@ -195,9 +199,13 @@ export default function Home() {
         onSelectLevel={(isFirstTime) => {
           if (isFirstTime) {
             setActiveTab('new-user');
+            // Ensure beginner mode is ON for new users
+            if (!isBeginnerMode) toggleMode(); 
             localStorage.setItem('usemoney_mode', 'beginner');
           } else {
             setActiveTab('dashboard');
+            // Ensure advanced mode is ON for existing users
+            if (isBeginnerMode) toggleMode();
             localStorage.setItem('usemoney_mode', 'advanced');
           }
           // Mark as onboarded and close

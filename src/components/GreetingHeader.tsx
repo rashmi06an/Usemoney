@@ -4,18 +4,13 @@ import React from 'react';
 import { useTimeGreeting } from '@/hooks/useTimeGreeting';
 import { motion } from 'framer-motion';
 
-export const GreetingHeader: React.FC = () => {
+export const GreetingHeader: React.FC<{ isBeginnerMode: boolean }> = ({ isBeginnerMode }) => {
   const { isNewUser } = useTimeGreeting();
   
   const getGreeting = () => {
     const hour = new Date().getHours();
-    const isNew = isNewUser;
     
-    // Mocked for now
-    const isLongGap = false; 
-
-    if (isNew) return "Welcome to UseMoney, Rashmi 👋";
-    if (isLongGap) return "Welcome back, Rashmi — it’s been a while 👋";
+    if (isBeginnerMode) return "Welcome to UseMoney, Rashmi 👋";
     
     if (hour < 12) return "Good Morning, Rashmi 👋";
     if (hour < 17) return "Good Afternoon, Rashmi 👋";
@@ -24,8 +19,8 @@ export const GreetingHeader: React.FC = () => {
   };
 
   const greeting = getGreeting();
-  const subtitle = isNewUser 
-    ? "Your AI-powered investing OS is ready. Let's build your wealth."
+  const subtitle = isBeginnerMode 
+    ? "Your AI-powered investing OS is ready. Let's start building your wealth."
     : "Your portfolio moved +2.1% today. AI has found 3 new opportunities.";
 
   return (
