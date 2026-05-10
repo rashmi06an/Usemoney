@@ -14,7 +14,8 @@ import {
   Brain,
   Sparkles,
   Plus,
-  UserPlus
+  UserPlus,
+  HelpCircle
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -31,6 +32,7 @@ const MENU_ITEMS = [
   { id: 'markets', label: 'Markets', icon: TrendingUp },
   { id: 'watchlist', label: 'Watchlist', icon: Star },
   { id: 'goals', label: 'FIRE Goals', icon: Target },
+  { id: 'help', label: 'Guides', icon: HelpCircle },
   { id: 'new-user', label: 'New User', icon: UserPlus },
 ];
 

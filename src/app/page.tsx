@@ -14,6 +14,7 @@ import { ContextualIntro } from '@/components/ContextualIntro';
 import { StockSageChat } from '@/components/StockSageChat';
 import { NewUserDashboard } from '@/components/NewUserDashboard';
 import { MarketView } from '@/components/MarketView';
+import { HelpCenter } from '@/components/HelpCenter';
 import { FloatingAI } from '@/components/FloatingAI';
 import { WatchlistEmpty } from '@/components/WatchlistEmpty';
 import { useTheme } from '@/hooks/useTheme';
@@ -133,6 +134,8 @@ export default function Home() {
             <p className="text-muted">Analyzing 5000+ stocks...</p>
           </div>
         );
+      case 'help':
+        return <HelpCenter />;
       default:
         return (
           <div className="rounded-3xl glass-darker p-20 text-center border border-border-primary">
@@ -189,10 +192,16 @@ export default function Home() {
       <StoryOnboarding 
         isOpen={isOnboardingOpen}
         onClose={handleComplete}
-        onSelectLevel={(isBeginner) => {
-          const mode = isBeginner ? 'beginner' : 'advanced';
-          localStorage.setItem('usemoney_mode', mode);
-          window.location.reload();
+        onSelectLevel={(isFirstTime) => {
+          if (isFirstTime) {
+            setActiveTab('new-user');
+            localStorage.setItem('usemoney_mode', 'beginner');
+          } else {
+            setActiveTab('dashboard');
+            localStorage.setItem('usemoney_mode', 'advanced');
+          }
+          // Mark as onboarded and close
+          localStorage.setItem('usemoney_onboarded', 'true');
         }}
       />
 

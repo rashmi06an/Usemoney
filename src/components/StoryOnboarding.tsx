@@ -67,8 +67,8 @@ export const StoryOnboarding: React.FC<StoryOnboardingProps> = ({ isOpen, onClos
   const handleLevelSelect = (isBeginner: boolean) => {
     console.log("Level selected:", isBeginner ? "Beginner" : "Advanced");
     onSelectLevel(isBeginner);
-    // Note: page.tsx usually reloads here, but we set current just in case it doesn't
-    setCurrent(0);
+    // Directly close the modal to fulfill the "redirect" requirement
+    onClose();
   };
 
   const story = current >= 0 ? STORIES[current] : null;
@@ -131,8 +131,8 @@ export const StoryOnboarding: React.FC<StoryOnboardingProps> = ({ isOpen, onClos
                   className="w-full flex items-center justify-between p-6 rounded-3xl bg-foreground/[0.03] border border-border-primary text-left hover:bg-foreground/[0.05] hover:border-emerald-accent/50 transition-all group relative z-50"
                 >
                   <div>
-                    <h3 className="font-bold text-foreground text-lg">Beginner</h3>
-                    <p className="text-sm text-muted">Simple language & guided UI</p>
+                    <h3 className="font-bold text-foreground text-lg">Sign In</h3>
+                    <p className="text-sm text-muted">First time? Setup your profile.</p>
                   </div>
                   <ChevronRight size={20} className="text-muted group-hover:text-emerald-accent transition-colors" />
                 </button>
@@ -143,8 +143,8 @@ export const StoryOnboarding: React.FC<StoryOnboardingProps> = ({ isOpen, onClos
                   className="w-full flex items-center justify-between p-6 rounded-3xl bg-foreground/[0.03] border border-border-primary text-left hover:bg-foreground/[0.05] hover:border-indigo-accent/50 transition-all group relative z-50"
                 >
                   <div>
-                    <h3 className="font-bold text-foreground text-lg">Advanced</h3>
-                    <p className="text-sm text-muted">Deep metrics & raw data</p>
+                    <h3 className="font-bold text-foreground text-lg">Log In</h3>
+                    <p className="text-sm text-muted">Welcome back to your Action Hub.</p>
                   </div>
                   <Zap size={20} className="text-muted group-hover:text-indigo-accent transition-colors" />
                 </button>
