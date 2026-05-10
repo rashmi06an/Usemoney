@@ -16,7 +16,10 @@ import {
   Rocket,
   LayoutDashboard,
   UserPlus,
-  LogIn
+  LogIn,
+  BarChart3,
+  LineChart,
+  PieChart
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -39,7 +42,8 @@ const STORIES = [
     icon: Wallet,
     color: "bg-emerald-accent",
     accent: "text-emerald-accent",
-    image: "https://images.unsplash.com/photo-1611974714851-eb6053e6c376?q=80&w=2000&auto=format&fit=crop"
+    visualText: "Unified Portfolio",
+    visualIcon: BarChart3
   },
   {
     id: 'ai',
@@ -48,7 +52,8 @@ const STORIES = [
     icon: Sparkles,
     color: "bg-indigo-accent",
     accent: "text-indigo-accent",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2000&auto=format&fit=crop"
+    visualText: "AI Intelligence",
+    visualIcon: Brain
   },
   {
     id: 'action',
@@ -57,7 +62,8 @@ const STORIES = [
     icon: Zap,
     color: "bg-amber-500",
     accent: "text-amber-500",
-    image: "https://images.unsplash.com/photo-1551288049-bbda48658a7e?q=80&w=2000&auto=format&fit=crop"
+    visualText: "Interactive Hub",
+    visualIcon: Zap
   },
   {
     id: 'fire',
@@ -66,7 +72,8 @@ const STORIES = [
     icon: Target,
     color: "bg-purple-500",
     accent: "text-purple-500",
-    image: "https://images.unsplash.com/photo-1454165833767-027ffea7028d?q=80&w=2000&auto=format&fit=crop"
+    visualText: "FIRE Strategy",
+    visualIcon: Target
   }
 ];
 
@@ -90,7 +97,6 @@ export const StoryOnboarding: React.FC<StoryOnboardingProps> = ({ isOpen, onClos
       setDirection(1);
       setCurrent(current + 1);
     } else {
-      // End of walkthrough
       onSelectLevel(true);
       onClose();
     }
@@ -114,22 +120,22 @@ export const StoryOnboarding: React.FC<StoryOnboardingProps> = ({ isOpen, onClos
         animate={{ scale: 1, opacity: 1 }}
         className="relative w-full max-w-5xl bg-background rounded-[3rem] overflow-hidden shadow-2xl border border-white/5 flex flex-col md:flex-row min-h-[600px]"
       >
-        {/* Left Column: Visuals */}
-        <div className="w-full md:w-1/2 relative overflow-hidden bg-foreground/5 min-h-[300px] md:min-h-full">
+        {/* Left Column: Icon-Based Visuals */}
+        <div className="w-full md:w-1/2 relative overflow-hidden min-h-[300px] md:min-h-full flex items-center justify-center">
           <AnimatePresence mode="wait" custom={direction}>
             {isSelectionScreen ? (
               <motion.div
                 key="selection-visual"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center bg-gradient-to-br from-emerald-accent/20 via-background to-background"
               >
-                <div className="h-24 w-24 rounded-[2rem] bg-emerald-accent/10 border border-emerald-accent/20 flex items-center justify-center mb-8">
-                  <Rocket size={48} className="text-emerald-accent" />
+                <div className="h-32 w-32 rounded-[2.5rem] bg-emerald-accent/10 border border-emerald-accent/20 flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(16,185,129,0.1)]">
+                  <Rocket size={64} className="text-emerald-accent" />
                 </div>
-                <h2 className="text-3xl font-bold text-foreground mb-4">Welcome to UseMoney</h2>
-                <p className="text-muted font-medium">Your AI-powered workspace for wealth creation and financial freedom.</p>
+                <h2 className="text-4xl font-bold text-foreground mb-4 tracking-tighter">UseMoney <span className="text-emerald-accent">AI</span></h2>
+                <p className="text-muted font-medium px-8 leading-relaxed">Your professional workspace for high-conviction investing.</p>
               </motion.div>
             ) : (
               <motion.div
@@ -139,18 +145,26 @@ export const StoryOnboarding: React.FC<StoryOnboardingProps> = ({ isOpen, onClos
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: direction > 0 ? -300 : 300, opacity: 0 }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="absolute inset-0"
+                className={cn("absolute inset-0 flex flex-col items-center justify-center p-12 text-center overflow-hidden", STORIES[current].color.replace('bg-', 'bg-opacity-10 bg-'))}
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent z-10" />
-                <img 
-                  src={STORIES[current].image} 
-                  alt={STORIES[current].title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute bottom-8 left-8 z-20">
-                  <div className={cn("h-16 w-16 rounded-2xl flex items-center justify-center text-white mb-4 shadow-2xl", STORIES[current].color)}>
-                    {React.createElement(STORIES[current].icon, { size: 32 })}
-                  </div>
+                {/* Dynamic Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                  <div className="absolute top-10 left-10"><BarChart3 size={120} /></div>
+                  <div className="absolute bottom-10 right-10"><LineChart size={120} /></div>
+                </div>
+
+                <div className={cn(
+                  "h-48 w-48 rounded-[3rem] flex items-center justify-center mb-10 shadow-2xl relative z-10",
+                  STORIES[current].color,
+                  "text-white"
+                )}>
+                  {React.createElement(STORIES[current].visualIcon, { size: 80 })}
+                </div>
+                
+                <div className="relative z-10">
+                  <span className={cn("px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.3em] bg-white/10 border border-white/20 mb-4 inline-block text-white")}>
+                    {STORIES[current].visualText}
+                  </span>
                 </div>
               </motion.div>
             )}
@@ -169,16 +183,19 @@ export const StoryOnboarding: React.FC<StoryOnboardingProps> = ({ isOpen, onClos
                 className="space-y-10"
               >
                 <div className="space-y-4">
-                  <span className="text-[10px] font-bold text-emerald-accent uppercase tracking-[0.3em]">Entry Point</span>
+                  <span className="text-[10px] font-bold text-emerald-accent uppercase tracking-[0.3em]">Launchpad</span>
                   <h2 className="text-4xl font-bold text-foreground tracking-tight leading-tight">
-                    How should we <br />
-                    <span className="text-emerald-accent italic">get started?</span>
+                    Welcome <br />
+                    <span className="text-emerald-accent italic">to the Hub.</span>
                   </h2>
                 </div>
 
                 <div className="space-y-4">
                   <button
-                    onClick={() => setCurrent(0)} // Start Walkthrough
+                    onClick={() => {
+                      onSelectLevel(true);
+                      onClose();
+                    }}
                     className="w-full flex items-center justify-between p-7 rounded-[2.5rem] bg-foreground/[0.03] border border-border-primary text-left hover:bg-foreground/[0.05] hover:border-emerald-accent/50 transition-all group"
                   >
                     <div className="flex items-center gap-5">
@@ -187,7 +204,7 @@ export const StoryOnboarding: React.FC<StoryOnboardingProps> = ({ isOpen, onClos
                       </div>
                       <div>
                         <h3 className="font-bold text-foreground text-lg">Sign In</h3>
-                        <p className="text-sm text-muted">New user? Let's take a tour.</p>
+                        <p className="text-sm text-muted">New user? Go to beginner dashboard.</p>
                       </div>
                     </div>
                     <ChevronRight size={20} className="text-muted group-hover:text-emerald-accent transition-transform" />
