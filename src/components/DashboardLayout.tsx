@@ -51,15 +51,26 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ isBeginnerMode
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-4">
               <span className="text-[10px] font-bold text-muted uppercase tracking-[0.2em]">Total Portfolio Value</span>
-              <div className="px-2 py-0.5 rounded-md bg-emerald-accent/10 text-emerald-accent text-[10px] font-bold">
-                +2.1% Today
-              </div>
+              {!isBeginnerMode && (
+                <div className="px-2 py-0.5 rounded-md bg-emerald-accent/10 text-emerald-accent text-[10px] font-bold">
+                  +2.1% Today
+                </div>
+              )}
             </div>
-            <h2 className="text-5xl font-bold text-foreground tracking-tight mb-4">$124,592.30</h2>
-            <p className="text-muted font-medium flex items-center gap-2">
-              <span className="text-emerald-accent font-bold">+$2,612.10</span> 
-              since last market close
-            </p>
+            {isBeginnerMode ? (
+              <div className="space-y-4">
+                <h2 className="text-4xl font-bold text-foreground tracking-tight mb-2">Start building your <span className="italic text-emerald-accent">wealth</span></h2>
+                <p className="text-muted font-medium">Link a broker or add assets manually to see AI insights.</p>
+              </div>
+            ) : (
+              <>
+                <h2 className="text-5xl font-bold text-foreground tracking-tight mb-4">$124,592.30</h2>
+                <p className="text-muted font-medium flex items-center gap-2">
+                  <span className="text-emerald-accent font-bold">+$2,612.10</span> 
+                  since last market close
+                </p>
+              </>
+            )}
           </div>
         </motion.div>
 
@@ -86,34 +97,56 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ isBeginnerMode
         {/* Dynamic Section (AI Roast or Holdings) */}
         <div className="space-y-6">
           <div className="flex items-center justify-between px-2">
-            <h3 className="text-xl font-bold text-foreground">Top Movers</h3>
-            <button className="text-xs font-bold text-emerald-accent hover:underline">View All</button>
+            <h3 className="text-xl font-bold text-foreground">
+              {isBeginnerMode ? 'Growth Discovery' : 'Top Movers'}
+            </h3>
+            {!isBeginnerMode && <button className="text-xs font-bold text-emerald-accent hover:underline">View All</button>}
           </div>
+          
           <div className="space-y-4">
-            {holdings.map((stock, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.1 }}
-                onClick={() => setSelectedStock(stock)}
-                className="flex items-center justify-between p-6 rounded-3xl bg-foreground/[0.02] border border-border-primary hover:bg-foreground/[0.04] transition-all cursor-pointer group"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-2xl bg-foreground/[0.03] flex items-center justify-center border border-border-primary text-muted group-hover:text-foreground transition-colors">
-                    <TrendingUp size={20} />
+            {isBeginnerMode ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-8 rounded-[2rem] bg-foreground/[0.02] border border-dashed border-border-primary flex flex-col items-center justify-center text-center group cursor-pointer hover:bg-foreground/[0.04] transition-all">
+                  <div className="h-12 w-12 rounded-2xl bg-emerald-accent/10 text-emerald-accent flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <TrendingUp size={24} />
                   </div>
-                  <div>
-                    <p className="font-bold text-foreground">{stock.name}</p>
-                    <p className="text-[10px] font-bold text-muted uppercase tracking-widest">Global Market</p>
+                  <h4 className="font-bold text-foreground mb-1">Add First Stock</h4>
+                  <p className="text-xs text-muted">Get AI analysis instantly</p>
+                </div>
+                <div className="p-8 rounded-[2rem] bg-foreground/[0.02] border border-dashed border-border-primary flex flex-col items-center justify-center text-center group cursor-pointer hover:bg-foreground/[0.04] transition-all">
+                  <div className="h-12 w-12 rounded-2xl bg-indigo-accent/10 text-indigo-accent flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <Shield size={24} />
                   </div>
+                  <h4 className="font-bold text-foreground mb-1">Link Broker</h4>
+                  <p className="text-xs text-muted">Auto-sync your holdings</p>
                 </div>
-                <div className="text-right">
-                  <p className="font-bold text-foreground">{stock.price}</p>
-                  <p className="text-xs font-bold text-emerald-accent">{stock.change}</p>
-                </div>
-              </motion.div>
-            ))}
+              </div>
+            ) : (
+              holdings.map((stock, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  onClick={() => setSelectedStock(stock)}
+                  className="flex items-center justify-between p-6 rounded-3xl bg-foreground/[0.02] border border-border-primary hover:bg-foreground/[0.04] transition-all cursor-pointer group"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="h-12 w-12 rounded-2xl bg-foreground/[0.03] flex items-center justify-center border border-border-primary text-muted group-hover:text-foreground transition-colors">
+                      <TrendingUp size={20} />
+                    </div>
+                    <div>
+                      <p className="font-bold text-foreground">{stock.name}</p>
+                      <p className="text-[10px] font-bold text-muted uppercase tracking-widest">Global Market</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-foreground">{stock.price}</p>
+                    <p className="text-xs font-bold text-emerald-accent">{stock.change}</p>
+                  </div>
+                </motion.div>
+              ))
+            )}
           </div>
         </div>
       </div>

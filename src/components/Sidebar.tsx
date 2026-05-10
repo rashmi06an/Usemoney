@@ -36,8 +36,17 @@ const MENU_ITEMS = [
   { id: 'new-user', label: 'New User', icon: UserPlus },
 ];
 
-export const Sidebar: React.FC<{ activeId: string; onSelect: (id: string) => void }> = ({ activeId, onSelect }) => {
+export const Sidebar: React.FC<{ 
+  activeId: string; 
+  onSelect: (id: string) => void;
+  isBeginnerMode: boolean;
+}> = ({ activeId, onSelect, isBeginnerMode }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const filteredMenuItems = MENU_ITEMS.filter(item => {
+    if (item.id === 'new-user' && !isBeginnerMode) return false;
+    return true;
+  });
 
   // Restore scroll position
   useEffect(() => {
@@ -76,7 +85,7 @@ export const Sidebar: React.FC<{ activeId: string; onSelect: (id: string) => voi
         className="flex-1 overflow-y-auto px-4 space-y-2 no-scrollbar pb-10"
       >
         <div className="px-4 mb-2 text-[10px] font-bold text-muted uppercase tracking-[0.2em]">Menu</div>
-        {MENU_ITEMS.map((item) => (
+        {filteredMenuItems.map((item) => (
           <button
             key={item.id}
             onClick={() => onSelect(item.id)}
@@ -110,6 +119,22 @@ export const Sidebar: React.FC<{ activeId: string; onSelect: (id: string) => voi
           <LogOut size={20} />
           <span className="font-bold text-sm tracking-tight">Sign Out</span>
         </button>
+
+        <div className="pt-10 pb-4 flex justify-center">
+          <button 
+            onClick={() => {
+              Object.keys(localStorage).forEach(key => {
+                if (key.startsWith('usemoney_') || key === 'dismissed_intros') {
+                  localStorage.removeItem(key);
+                }
+              });
+              window.location.reload();
+            }}
+            className="text-[8px] font-bold text-muted uppercase tracking-[0.4em] opacity-20 hover:opacity-100 transition-opacity cursor-pointer"
+          >
+            Reset System State
+          </button>
+        </div>
       </div>
 
       <div className="p-6">
