@@ -42,6 +42,8 @@ const MARKET_INDICES = [
   { name: 'NIFTY IT', price: '29,394', change: '+1.21%', up: true },
 ];
 
+import { ActionSheet } from './ActionSheet';
+
 interface StockSageChatProps {
   isBeginnerMode: boolean;
 }
@@ -49,9 +51,15 @@ interface StockSageChatProps {
 export const StockSageChat: React.FC<StockSageChatProps> = ({ isBeginnerMode }) => {
   const [input, setInput] = useState('');
   const [activeChatId, setActiveChatId] = useState('1');
+  const [selectedIndex, setSelectedIndex] = useState<any>(null);
 
   return (
     <div className="flex h-full w-full overflow-hidden bg-transparent">
+      <ActionSheet 
+        isOpen={!!selectedIndex} 
+        onClose={() => setSelectedIndex(null)} 
+        data={selectedIndex} 
+      />
       
       {/* Sub-Sidebar: Chat History - Hidden for beginners */}
       {!isBeginnerMode && (
@@ -102,7 +110,8 @@ export const StockSageChat: React.FC<StockSageChatProps> = ({ isBeginnerMode }) 
           {MARKET_INDICES.map((index) => (
             <div 
               key={index.name} 
-              className="p-4 rounded-2xl bg-foreground/[0.03] border border-border-primary hover:bg-foreground/[0.06] transition-all cursor-pointer group shadow-sm"
+              onClick={() => setSelectedIndex(index)}
+              className="p-4 rounded-2xl bg-foreground/[0.03] border border-border-primary hover:bg-foreground/[0.06] transition-all cursor-pointer group shadow-sm active:scale-95"
             >
               <p className="text-[9px] font-bold text-muted uppercase tracking-widest mb-1">{index.name}</p>
               <h4 className="text-lg font-bold text-foreground">{index.price}</h4>

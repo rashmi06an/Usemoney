@@ -12,6 +12,8 @@ import { DashboardSkeleton } from '@/components/Skeleton';
 import { StoryOnboarding } from '@/components/StoryOnboarding';
 import { ContextualIntro } from '@/components/ContextualIntro';
 import { StockSageChat } from '@/components/StockSageChat';
+import { NewUserDashboard } from '@/components/NewUserDashboard';
+import { MarketView } from '@/components/MarketView';
 import { FloatingAI } from '@/components/FloatingAI';
 import { WatchlistEmpty } from '@/components/WatchlistEmpty';
 import { useTheme } from '@/hooks/useTheme';
@@ -25,8 +27,8 @@ function cn(...inputs: ClassValue[]) {
 }
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState('dashboard');
   const { isNewUser } = useTimeGreeting();
+  const [activeTab, setActiveTab] = useState(isNewUser ? 'new-user' : 'dashboard');
   const { theme, toggleTheme } = useTheme();
   const { 
     isOpen: isOnboardingOpen, 
@@ -69,6 +71,11 @@ export default function Home() {
       name: 'FIRE Goals',
       title: 'Plan Your Freedom',
       description: 'Set your retirement targets and track your progress towards Financial Independence and Retiring Early.'
+    },
+    'new-user': {
+      name: 'New User',
+      title: 'Setup Your Workspace',
+      description: 'Personalize your profile and goals to get the most out of UseMoney AI.'
     }
   };
 
@@ -98,6 +105,8 @@ export default function Home() {
     if (isLoading) return <DashboardSkeleton />;
 
     switch (activeTab) {
+      case 'new-user':
+        return <NewUserDashboard />;
       case 'chat':
         return <StockSageChat isBeginnerMode={isBeginnerMode} />;
       case 'dashboard':
@@ -109,12 +118,7 @@ export default function Home() {
       case 'watchlist':
         return <WatchlistEmpty />;
       case 'markets':
-        return (
-          <div className="rounded-3xl glass-darker p-20 text-center border border-border-primary">
-             <h3 className="text-2xl font-bold text-foreground mb-2">Market View</h3>
-             <p className="text-muted">Rendering {isBeginnerMode ? 'Beginner' : 'Advanced'} analytics...</p>
-          </div>
-        );
+        return <MarketView isBeginnerMode={isBeginnerMode} />;
       case 'portfolio':
         return (
           <div className="rounded-3xl glass-darker p-20 text-center border border-border-primary">

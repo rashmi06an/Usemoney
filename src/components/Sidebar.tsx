@@ -13,7 +13,8 @@ import {
   Target,
   Brain,
   Sparkles,
-  Plus
+  Plus,
+  UserPlus
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -30,6 +31,7 @@ const MENU_ITEMS = [
   { id: 'markets', label: 'Markets', icon: TrendingUp },
   { id: 'watchlist', label: 'Watchlist', icon: Star },
   { id: 'goals', label: 'FIRE Goals', icon: Target },
+  { id: 'new-user', label: 'New User', icon: UserPlus },
 ];
 
 export const Sidebar: React.FC<{ activeId: string; onSelect: (id: string) => void }> = ({ activeId, onSelect }) => {

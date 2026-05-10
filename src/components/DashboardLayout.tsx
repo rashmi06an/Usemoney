@@ -41,9 +41,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ isBeginnerMode
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-[2.5rem] glass-darker p-10 relative overflow-hidden"
+          onClick={() => setSelectedStock({ name: 'Net Worth', value: '$124,592.30', change: '+2.1%', up: true, type: 'stat' })}
+          className="rounded-[2.5rem] glass-darker p-10 relative overflow-hidden cursor-pointer group hover:bg-foreground/[0.04] transition-all"
         >
-          <div className="absolute top-0 right-0 p-8 opacity-10">
+          <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
             <TrendingUp size={120} />
           </div>
           
@@ -70,7 +71,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ isBeginnerMode
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="rounded-3xl glass-darker p-8 border border-border-primary"
+              onClick={() => setSelectedStock({ ...stat, type: 'stat', up: i === 1 })}
+              className="rounded-3xl glass-darker p-8 border border-border-primary cursor-pointer hover:bg-foreground/[0.04] transition-all active:scale-95 group"
             >
               <div className={cn("h-10 w-10 rounded-2xl bg-foreground/[0.03] flex items-center justify-center mb-6", stat.color)}>
                 <stat.icon size={20} />
