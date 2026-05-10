@@ -1,0 +1,195 @@
+'use client';
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Sparkles, 
+  Plus, 
+  Search, 
+  MessageSquare, 
+  Clock, 
+  TrendingUp, 
+  TrendingDown, 
+  ArrowUpRight,
+  Zap,
+  Target,
+  Ghost,
+  PieChart,
+  Command,
+  AtSign,
+  Send,
+  MoreHorizontal
+} from 'lucide-react';
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+const CHAT_HISTORY = [
+  { id: '1', title: 'NIPPON INDIA SILVER ETF LATE..', date: 'Today' },
+  { id: '2', title: 'Research', date: 'Today' },
+  { id: '3', title: "How's my portfolio doing this q..", date: 'Today' },
+  { id: '4', title: "Market overview — how are Nif..", date: 'Yesterday' },
+  { id: '5', title: 'Research a stock', date: 'Last Week' },
+];
+
+const MARKET_INDICES = [
+  { name: 'NIFTY 50', price: '24,176', change: '-0.62%', up: false },
+  { name: 'SENSEX', price: '77,328', change: '-0.66%', up: false },
+  { name: 'NIFTY BANK', price: '55,311', change: '-1.31%', up: false },
+  { name: 'NIFTY IT', price: '29,394', change: '+1.21%', up: true },
+];
+
+interface StockSageChatProps {
+  isBeginnerMode: boolean;
+}
+
+export const StockSageChat: React.FC<StockSageChatProps> = ({ isBeginnerMode }) => {
+  const [input, setInput] = useState('');
+  const [activeChatId, setActiveChatId] = useState('1');
+
+  return (
+    <div className="flex h-full w-full overflow-hidden bg-transparent">
+      
+      {/* Sub-Sidebar: Chat History - Hidden for beginners */}
+      {!isBeginnerMode && (
+        <div className="w-72 border-r border-white/5 flex flex-col bg-[#050913]/40 backdrop-blur-xl">
+          <div className="p-6">
+            <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-bold hover:bg-emerald-500/20 transition-all text-xs">
+              <Plus size={16} />
+              <span>New Chat</span>
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto px-4 space-y-6 no-scrollbar pb-10">
+            <div className="space-y-1">
+              <p className="px-4 text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-2">Today</p>
+              {CHAT_HISTORY.filter(c => c.date === 'Today').map(chat => (
+                <button
+                  key={chat.id}
+                  onClick={() => setActiveChatId(chat.id)}
+                  className={cn(
+                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-xs transition-all group",
+                    activeChatId === chat.id ? "bg-white/5 text-white" : "text-slate-500 hover:text-white hover:bg-white/5"
+                  )}
+                >
+                  <MessageSquare size={14} className={activeChatId === chat.id ? "text-emerald-500" : "text-slate-600"} />
+                  <span className="truncate flex-1 font-semibold">{chat.title}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col items-center justify-center relative p-6 overflow-hidden">
+        
+        {/* Hero Section - Minimized */}
+        <div className="text-center mb-8 relative pt-4">
+          <h1 className="text-4xl font-bold text-white tracking-tight mb-2">
+            Good evening, <span className="italic text-emerald-accent">Rashmi Anand</span>
+          </h1>
+          <p className="text-lg text-slate-400 font-medium">
+            What are we <span className="italic text-emerald-accent">researching</span> today?
+          </p>
+        </div>
+
+        {/* Market Grid - Minimized */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl mb-8">
+          {MARKET_INDICES.map((index) => (
+            <div 
+              key={index.name} 
+              className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.06] transition-all cursor-pointer group"
+            >
+              <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1">{index.name}</p>
+              <h4 className="text-lg font-bold text-white">{index.price}</h4>
+              <p className={cn(
+                "text-[10px] font-bold flex items-center gap-1",
+                index.up ? "text-emerald-500" : "text-red-500"
+              )}>
+                {index.up ? <ArrowUpRight size={10} /> : <TrendingDown size={10} />}
+                {index.change}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Immersive Input Box - Minimized */}
+        <div className="w-full max-w-3xl">
+          <div className="rounded-3xl bg-[#0A1122]/90 backdrop-blur-2xl border border-white/10 p-1 shadow-2xl focus-within:border-emerald-500/40 transition-all">
+            <div className="px-6 pt-4 pb-1 flex justify-between items-center">
+              <p className="text-xs text-slate-500 font-bold uppercase tracking-widest opacity-60">Ask StockSage anything...</p>
+              <div className="flex items-center gap-2 px-2 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[9px] font-bold">
+                <Zap size={8} fill="currentColor" />
+                195
+              </div>
+            </div>
+            
+            <textarea 
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="w-full bg-transparent border-none focus:outline-none px-6 py-2 text-sm text-white placeholder:text-slate-700 resize-none h-20 font-medium"
+              placeholder="Suggest some undervalued tech stocks..."
+            />
+
+            <div className="px-4 pb-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <button className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 transition-all">
+                  <Plus size={16} />
+                </button>
+                <div className="h-4 w-[1px] bg-white/10 mx-1" />
+                <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 text-slate-400 text-[10px] font-bold">
+                  <AtSign size={12} />
+                  mention
+                </button>
+                <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 text-slate-400 text-[10px] font-bold">
+                  <Command size={12} />
+                  command
+                </button>
+              </div>
+              <div className="flex items-center gap-2">
+                <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-[10px] font-bold">
+                  <div className="h-4 w-4 rounded-lg bg-indigo-500 flex items-center justify-center text-[8px] text-white font-bold">G</div>
+                  2.5 Pro
+                </button>
+                <button className={cn(
+                  "h-10 w-10 rounded-xl flex items-center justify-center transition-all",
+                  input.trim() ? "bg-emerald-500 text-black shadow-lg shadow-emerald-500/20" : "bg-white/5 text-white/10 cursor-not-allowed"
+                )}>
+                  <Send size={18} fill={input.trim() ? "currentColor" : "none"} />
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-4 flex flex-wrap justify-center gap-8 text-[9px] font-bold text-slate-600 uppercase tracking-widest">
+            <span className="flex items-center gap-2">/ commands</span>
+            <span className="flex items-center gap-2">@ stocks</span>
+            <span className="flex items-center gap-2">⏎ send</span>
+          </div>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-2 pb-4">
+            {[
+              { label: 'Market pulse', icon: TrendingUp },
+              { label: "How's my portfolio?", icon: PieChart },
+              { label: 'Roast my holdings', icon: Ghost },
+              { label: 'Research a stock', icon: Search },
+              { label: 'FIRE status', icon: Target },
+            ].map((pill) => (
+              <button 
+                key={pill.label}
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/5 text-[10px] font-bold text-slate-400 hover:text-emerald-500 transition-all group"
+              >
+                <pill.icon size={12} className="opacity-70 group-hover:opacity-100" />
+                {pill.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
